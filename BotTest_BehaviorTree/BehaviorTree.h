@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <memory>
+#include <functional>
 
 enum class BehaviorStatus
 {
@@ -8,7 +9,6 @@ enum class BehaviorStatus
 	Failure,
 	Running,
 };
-
 using NodeIdType = unsigned int;
 
 class IBehaviorNode
@@ -21,6 +21,7 @@ public:
 
 public:
 	void AddChildNode(IBehaviorNode::SPtr childNode);
+	virtual BehaviorStatus Do() = 0;
 
 public:
 	NodeIdType GetNodeId() { return nodeId; }
@@ -31,6 +32,22 @@ private:
 
 private:
 	std::vector<IBehaviorNode::SPtr> childrenNode{};
+};
+
+using BehaviorActionType = std::function<BehaviorStatus()>;
+
+class BehaviorAction : public IBehaviorNode
+{
+public:
+	BehaviorAction() = delete;
+	BehaviorAction(BehaviorActionType&& inAction);
+	virtual ~BehaviorAction() = default;
+
+public:
+	BehaviorStatus Do() override;
+
+private:
+	BehaviorActionType action;
 };
 
 class BehaviorTree
