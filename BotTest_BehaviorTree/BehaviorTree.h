@@ -40,7 +40,7 @@ class BehaviorAction : public IBehaviorNode
 {
 public:
 	BehaviorAction() = delete;
-	BehaviorAction(BehaviorActionType&& inAction);
+	explicit BehaviorAction(BehaviorActionType&& inAction);
 	virtual ~BehaviorAction() = default;
 
 public:
@@ -48,6 +48,22 @@ public:
 
 private:
 	BehaviorActionType action;
+};
+
+using BehaviorConditionType = std::function<bool()>;
+
+class BehaviorCondition : public IBehaviorNode
+{
+public:
+	BehaviorCondition() = delete;
+	explicit BehaviorCondition(BehaviorConditionType&& inCondition);
+	virtual ~BehaviorCondition() = default;
+
+public:
+	BehaviorStatus Do() override;
+
+private:
+	BehaviorConditionType condition;
 };
 
 class BehaviorTree
