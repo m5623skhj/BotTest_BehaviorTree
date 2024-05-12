@@ -8,6 +8,9 @@ public:
 	~BehaviorTree() = default;
 
 public:
+	bool Tick();
+
+public:
 	void AddNode(IBehaviorNode::SPtr node);
 
 public:

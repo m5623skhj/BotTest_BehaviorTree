@@ -1,5 +1,10 @@
 #include "BehaviorTree.h"
 
+bool BehaviorTree::Tick()
+{
+	return true;
+}
+
 void BehaviorTree::AddNode(IBehaviorNode::SPtr node)
 {
 	nodes.emplace_back(node);
