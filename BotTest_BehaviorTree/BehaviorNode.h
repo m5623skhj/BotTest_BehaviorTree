@@ -28,11 +28,11 @@ public:
 	NodeIdType GetNodeId() { return nodeId; }
 	void SetNodeId(NodeIdType inNodeId) { nodeId = inNodeId; }
 
-private:
-	NodeIdType nodeId{};
+protected:
+	std::vector<IBehaviorNode::SPtr> childrenNode{};
 
 private:
-	std::vector<IBehaviorNode::SPtr> childrenNode{};
+	NodeIdType nodeId{};
 };
 
 using BehaviorActionType = std::function<BehaviorStatus()>;
@@ -65,4 +65,24 @@ public:
 
 private:
 	BehaviorConditionType condition;
+};
+
+class BehaviorSequence : public IBehaviorNode
+{
+public:
+	BehaviorSequence() = default;
+	virtual ~BehaviorSequence() = default;
+
+public:
+	BehaviorStatus Do() override;
+};
+
+class BehaviorSelector : public IBehaviorNode
+{
+public:
+	BehaviorSelector() = default;
+	~BehaviorSelector() = default;
+
+public:
+	BehaviorStatus Do() override;
 };

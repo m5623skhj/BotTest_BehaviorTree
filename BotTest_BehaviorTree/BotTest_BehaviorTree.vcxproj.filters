@@ -19,6 +19,9 @@
     <Filter Include="소스 파일\BehaviorTree\BehaviorNode">
       <UniqueIdentifier>{2090a819-1592-410f-bea7-532d92fa0ad0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\BehaviorTree\Decorator">
+      <UniqueIdentifier>{17f2af93-47eb-4b6e-b03e-7df7f4cb9d24}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
