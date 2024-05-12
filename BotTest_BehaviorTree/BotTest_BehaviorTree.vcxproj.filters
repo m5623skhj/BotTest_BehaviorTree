@@ -16,6 +16,9 @@
     <Filter Include="소스 파일\BehaviorTree">
       <UniqueIdentifier>{05f69526-dba3-45e5-bc8e-9006f83e7f5d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\BehaviorTree\BehaviorNode">
+      <UniqueIdentifier>{2090a819-1592-410f-bea7-532d92fa0ad0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -24,10 +27,16 @@
     <ClCompile Include="BehaviorTree.cpp">
       <Filter>소스 파일\BehaviorTree</Filter>
     </ClCompile>
+    <ClCompile Include="BehaviorNode.cpp">
+      <Filter>소스 파일\BehaviorTree\BehaviorNode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BehaviorTree.h">
       <Filter>소스 파일\BehaviorTree</Filter>
+    </ClInclude>
+    <ClInclude Include="BehaviorNode.h">
+      <Filter>소스 파일\BehaviorTree\BehaviorNode</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
