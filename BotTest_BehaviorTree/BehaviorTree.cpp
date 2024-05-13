@@ -15,7 +15,7 @@ void BehaviorTree::AddNode(IBehaviorNode::SPtr node)
 		rootNode = node;
 		lastAddedNode = rootNode;
 		
-		return ;
+		return;
 	}
 
 	lastAddedNode->AddChildNode(node);

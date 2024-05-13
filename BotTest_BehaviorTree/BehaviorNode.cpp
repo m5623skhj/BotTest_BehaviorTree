@@ -1,11 +1,6 @@
 #include "BehaviorNode.h"
 #include <utility>
 
-void IBehaviorNode::AddChildNode(IBehaviorNode::SPtr childNode)
-{
-	childrenNode.emplace_back(childNode);
-}
-
 BehaviorAction::BehaviorAction(BehaviorActionType&& inAction)
 	: action(std::move(inAction))
 {
