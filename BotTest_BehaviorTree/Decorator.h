@@ -1,5 +1,6 @@
 #pragma once
 #include "IBehaviorNode.h"
+#include <chrono>
 
 class DecoratorLoop : public IBehaviorNode
 {
@@ -26,4 +27,34 @@ public:
 
 public:
 	BehaviorStatus Do() override;
+};
+
+class DecoratorDelay : public IBehaviorNode
+{
+public:
+	DecoratorDelay() = delete;
+	explicit DecoratorDelay(unsigned int inDurationMilisecond);
+	~DecoratorDelay() = default;
+
+public:
+	BehaviorStatus Do() override;
+
+private:
+	const unsigned int durationMilisecond{};
+	std::chrono::system_clock::time_point startTime{};
+};
+
+class DecoratorRetry : public IBehaviorNode
+{
+public:
+	DecoratorRetry() = delete;
+	explicit DecoratorRetry(unsigned char inMaxRetryCount);
+	~DecoratorRetry() = default;
+
+public:
+	BehaviorStatus Do() override;
+
+private:
+	unsigned char maxRetryCount{};
+	unsigned char retryCount{};
 };

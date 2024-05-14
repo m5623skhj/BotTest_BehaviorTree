@@ -5,6 +5,11 @@ bool BehaviorTree::Tick()
 	return true;
 }
 
+void BehaviorTree::SetTickDuration(const unsigned int inTickDurationMilisecond)
+{
+	tickDurationMilisecond = inTickDurationMilisecond;
+}
+
 void BehaviorTree::AddNode(IBehaviorNode::SPtr node)
 {
 	nodes.emplace_back(node);

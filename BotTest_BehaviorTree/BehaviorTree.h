@@ -9,6 +9,7 @@ public:
 
 public:
 	bool Tick();
+	void SetTickDuration(const unsigned int inTickDurationMilisecond);
 
 public:
 	void AddNode(IBehaviorNode::SPtr node);
@@ -22,4 +23,6 @@ private:
 	std::vector<IBehaviorNode::SPtr> nodes{};
 
 	NodeIdType nodeIdGenerator{};
+
+	unsigned int tickDurationMilisecond{};
 };

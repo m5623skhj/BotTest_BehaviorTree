@@ -43,6 +43,7 @@ BehaviorStatus DecoratorInverter::Do()
 	{
 		return BehaviorStatus::InvalidType;
 	}
+
 	auto result = childrenNode[nodeId]->Do();
 	switch (result)
 	{
@@ -53,4 +54,55 @@ BehaviorStatus DecoratorInverter::Do()
 	default:
 		return BehaviorStatus::InvalidType;
 	}
+}
+
+DecoratorDelay::DecoratorDelay(unsigned int inDurationMilisecond)
+	: durationMilisecond(inDurationMilisecond)
+{
+}
+
+BehaviorStatus DecoratorDelay::Do()
+{
+	const auto now = std::chrono::system_clock::now();
+	if (startTime == std::chrono::system_clock::time_point())
+	{
+		startTime = now + std::chrono::milliseconds(durationMilisecond);
+	}
+
+	if (std::chrono::system_clock::now() < startTime)
+	{
+		return BehaviorStatus::Running;
+	}
+
+	return childrenNode[nodeId]->Do();
+}
+
+DecoratorRetry::DecoratorRetry(unsigned char inMaxRetryCount)
+	: maxRetryCount(inMaxRetryCount)
+{
+}
+
+BehaviorStatus DecoratorRetry::Do()
+{
+	auto result = childrenNode[nodeId]->Do();
+	switch (result)
+	{
+	case BehaviorStatus::Success:
+	case BehaviorStatus::Failure:
+		break;
+	case BehaviorStatus::Running:
+	{
+		if (retryCount < maxRetryCount)
+		{
+			++retryCount;
+			return BehaviorStatus::Running;
+		}
+
+		return BehaviorStatus::Failure;
+	}
+	default:
+		return BehaviorStatus::InvalidType;
+	}
+
+	return result;
 }
