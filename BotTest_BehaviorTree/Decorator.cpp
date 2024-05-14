@@ -1,9 +1,8 @@
 #include "Decorator.h"
 #include <iostream>
 
-DecoratorLoop::DecoratorLoop(NodeIdType inTargetNodeId, unsigned short inMaxLoopCount)
-	: nodeId(inTargetNodeId)
-	, maxLoopCount(inMaxLoopCount)
+DecoratorLoop::DecoratorLoop(unsigned short inMaxLoopCount)
+	: maxLoopCount(inMaxLoopCount)
 {
 }
 
@@ -36,4 +35,22 @@ BehaviorStatus DecoratorLoop::Do()
 
 	resetFlag = true;
 	return BehaviorStatus::Success;
+}
+
+BehaviorStatus DecoratorInverter::Do()
+{
+	if (childrenNode.empty() == true)
+	{
+		return BehaviorStatus::InvalidType;
+	}
+	auto result = childrenNode[nodeId]->Do();
+	switch (result)
+	{
+	case BehaviorStatus::Success:
+		return BehaviorStatus::Failure;
+	case BehaviorStatus::Failure:
+		return BehaviorStatus::Success;
+	default:
+		return BehaviorStatus::InvalidType;
+	}
 }

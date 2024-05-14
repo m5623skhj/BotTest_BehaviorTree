@@ -29,7 +29,5 @@ public:
 
 protected:
 	std::vector<IBehaviorNode::SPtr> childrenNode{};
-
-private:
 	NodeIdType nodeId{};
 };
