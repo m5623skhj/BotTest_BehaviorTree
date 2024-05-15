@@ -13,17 +13,15 @@ public:
 	void SetTickDuration(const unsigned int inTickDurationMilisecond);
 
 public:
-	bool AddChildNode(IBehaviorNode::SPtr node);
-	bool AddChildNode(IBehaviorNode::SPtr node, const NodeIdType targetParentNodeId, const NodeIdType myNodeId);
 	bool AddRootNode(IBehaviorNode::SPtr node);
+	bool AddChildNode(IBehaviorNode::SPtr node, const NodeIdType targetParentNodeId, const NodeIdType myNodeId);
 
 public:
-	size_t GetBehaviorTreeSize() { return nodes.size(); }
+	size_t GetBehaviorTreeSize() { return nodeMap.size(); }
 
 private:
 	IBehaviorNode::SPtr rootNode = nullptr;
 	IBehaviorNode::SPtr lastAddedNode = nullptr;
-	std::vector<IBehaviorNode::SPtr> nodes;
 	std::unordered_map<NodeIdType, IBehaviorNode::SPtr> nodeMap;
 
 	NodeIdType nodeIdGenerator{};

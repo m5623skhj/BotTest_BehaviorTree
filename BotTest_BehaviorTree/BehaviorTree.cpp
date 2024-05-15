@@ -15,28 +15,9 @@ void BehaviorTree::SetTickDuration(const unsigned int inTickDurationMilisecond)
 	tickDurationMilisecond = inTickDurationMilisecond;
 }
 
-bool BehaviorTree::AddChildNode(IBehaviorNode::SPtr node)
+bool BehaviorTree::AddRootNode(IBehaviorNode::SPtr node)
 {
-	if (node == nullptr)
-	{
-		return false;
-	}
-
-	nodes.emplace_back(node);
-	node->SetNodeId(nodeIdGenerator++);
-
-	if (rootNode == nullptr)
-	{
-		rootNode = node;
-		lastAddedNode = rootNode;
-		
-		return true;
-	}
-
-	lastAddedNode->AddChildNode(node);
-	lastAddedNode = node;
-
-	return true;
+	return AddChildNode(node, 0, 0);
 }
 
 bool BehaviorTree::AddChildNode(IBehaviorNode::SPtr node, const NodeIdType targetParentNodeId, const NodeIdType myNodeId)
@@ -67,21 +48,6 @@ bool BehaviorTree::AddChildNode(IBehaviorNode::SPtr node, const NodeIdType targe
 
 	lastAddedNode = rootNode;
 	nodeMap[targetParentNodeId]->AddChildNode(node);
-
-	return true;
-}
-
-bool BehaviorTree::AddRootNode(IBehaviorNode::SPtr node)
-{
-	if (node == nullptr ||
-		rootNode != nullptr)
-	{
-		return false;
-	}
-
-	rootNode = node;
-	lastAddedNode = rootNode;
-	nodeMap.insert({ 0, node });
 
 	return true;
 }
