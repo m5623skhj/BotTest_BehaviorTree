@@ -9,7 +9,7 @@ public:
 
 public:
 	DecoratorLoop() = delete;
-	explicit DecoratorLoop(unsigned short inMaxLoopCount);
+	explicit DecoratorLoop(unsigned short inMaxLoopCount, bool inIsAutoReset = true);
 	~DecoratorLoop() override = default;
 
 public:
@@ -18,8 +18,7 @@ public:
 private:
 	const unsigned short maxLoopCount;
 	unsigned short loopCount{};
-
-	bool resetFlag{};
+	bool isAutoReset{};
 };
 
 class DecoratorInverter : public IBehaviorNode
@@ -42,7 +41,7 @@ public:
 
 public:
 	DecoratorDelay() = delete;
-	explicit DecoratorDelay(unsigned int inDurationMilisecond);
+	explicit DecoratorDelay(unsigned int inDurationMilisecond, bool inIsAutoReset = true);
 	~DecoratorDelay() = default;
 
 public:
@@ -51,6 +50,7 @@ public:
 private:
 	const unsigned int durationMilisecond{};
 	std::chrono::system_clock::time_point startTime{};
+	bool isAutoReset{};
 };
 
 class DecoratorRetry : public IBehaviorNode

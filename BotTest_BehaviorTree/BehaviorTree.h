@@ -1,5 +1,6 @@
 #pragma once
 #include "BehaviorNode.h"
+#include <unordered_map>
 
 class BehaviorTree
 {
@@ -8,11 +9,13 @@ public:
 	~BehaviorTree() = default;
 
 public:
-	bool Tick();
+	BehaviorStatus Tick();
 	void SetTickDuration(const unsigned int inTickDurationMilisecond);
 
 public:
-	void AddNode(IBehaviorNode::SPtr node);
+	bool AddChildNode(IBehaviorNode::SPtr node);
+	bool AddChildNode(IBehaviorNode::SPtr node, const NodeIdType targetParentNodeId, const NodeIdType myNodeId);
+	bool AddRootNode(IBehaviorNode::SPtr node);
 
 public:
 	size_t GetBehaviorTreeSize() { return nodes.size(); }
@@ -20,7 +23,8 @@ public:
 private:
 	IBehaviorNode::SPtr rootNode = nullptr;
 	IBehaviorNode::SPtr lastAddedNode = nullptr;
-	std::vector<IBehaviorNode::SPtr> nodes{};
+	std::vector<IBehaviorNode::SPtr> nodes;
+	std::unordered_map<NodeIdType, IBehaviorNode::SPtr> nodeMap;
 
 	NodeIdType nodeIdGenerator{};
 

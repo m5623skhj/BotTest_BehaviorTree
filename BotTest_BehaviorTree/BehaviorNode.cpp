@@ -23,6 +23,22 @@ BehaviorCondition::BehaviorCondition(BehaviorConditionType&& inCondition)
 
 BehaviorStatus BehaviorCondition::Do()
 {
+	if (condition() == false)
+	{
+		return BehaviorStatus::Failure;
+	}
+
+	BehaviorStatus status;
+	for (auto& node : childrenNode)
+	{
+		status = node->Do();
+		if (status == BehaviorStatus::Success)
+		{
+			continue;
+		}
+
+		return status;
+	}
 	return BehaviorStatus::Success;
 }
 
@@ -33,13 +49,16 @@ BehaviorStatus BehaviorSequence::Do()
 		return BehaviorStatus::InvalidType;
 	}
 
-	for (auto id = GetNodeId(); id < childrenNode.size(); ++id)
+	BehaviorStatus status;
+	for (auto& node : childrenNode)
 	{
-		const auto& status = childrenNode.at(id)->Do();
-		if (status != BehaviorStatus::Success)
+		status = node->Do();
+		if (status == BehaviorStatus::Success)
 		{
-			return status;
+			continue;
 		}
+
+		return status;
 	}
 
 	return BehaviorStatus::Success;
@@ -52,10 +71,11 @@ BehaviorStatus BehaviorSelector::Do()
 		return BehaviorStatus::InvalidType;
 	}
 
-	for (auto id = GetNodeId(); id < childrenNode.size(); ++id)
+	BehaviorStatus status;
+	for(auto& node : childrenNode)
 	{
-		const auto& status = childrenNode.at(id)->Do();
-		if (status != BehaviorStatus::Success)
+		status = node->Do();
+		if (status != BehaviorStatus::Failure)
 		{
 			return status;
 		}

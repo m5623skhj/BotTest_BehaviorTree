@@ -1,8 +1,9 @@
 #include "Decorator.h"
 #include <iostream>
 
-DecoratorLoop::DecoratorLoop(unsigned short inMaxLoopCount)
+DecoratorLoop::DecoratorLoop(unsigned short inMaxLoopCount, bool inIsAutoReset)
 	: maxLoopCount(inMaxLoopCount)
+	, isAutoReset(inIsAutoReset)
 {
 }
 
@@ -13,27 +14,26 @@ BehaviorStatus DecoratorLoop::Do()
 		return BehaviorStatus::InvalidType;
 	}
 
+	BehaviorStatus status;
 	for (; loopCount < maxLoopCount; ++loopCount)
 	{
-		auto result = childrenNode[nodeId]->Do();
-		switch (result)
+		for (auto& node : childrenNode)
 		{
-		case BehaviorStatus::Success:
-			break;
-		case BehaviorStatus::InvalidType:
-		case BehaviorStatus::Failure:
-			resetFlag = false;
-			return result;
-		case BehaviorStatus::Running:
-			resetFlag = true;
-			return result;
-		default:
-			std::cout << "DecoratorLoop::Do() : Invalid result type " << static_cast<unsigned int>(result) << std::endl;
-			break;
+			status = node->Do();
+			if (status == BehaviorStatus::Success)
+			{
+				continue;
+			}
+
+			return status;
 		}
 	}
 
-	resetFlag = true;
+	if (isAutoReset == true)
+	{
+		loopCount = 0;
+	}
+
 	return BehaviorStatus::Success;
 }
 
@@ -44,20 +44,28 @@ BehaviorStatus DecoratorInverter::Do()
 		return BehaviorStatus::InvalidType;
 	}
 
-	auto result = childrenNode[nodeId]->Do();
-	switch (result)
+	BehaviorStatus status;
+	for (auto& node : childrenNode)
 	{
-	case BehaviorStatus::Success:
-		return BehaviorStatus::Failure;
-	case BehaviorStatus::Failure:
-		return BehaviorStatus::Success;
-	default:
-		return BehaviorStatus::InvalidType;
+		status = node->Do();
+		if (status == BehaviorStatus::Failure)
+		{
+			continue;
+		}
+		else if (status == BehaviorStatus::Success)
+		{
+			return BehaviorStatus::Failure;
+		}
+
+		return status;
 	}
+
+	return BehaviorStatus::Success;
 }
 
-DecoratorDelay::DecoratorDelay(unsigned int inDurationMilisecond)
+DecoratorDelay::DecoratorDelay(unsigned int inDurationMilisecond, bool inIsAutoReset)
 	: durationMilisecond(inDurationMilisecond)
+	, isAutoReset(inIsAutoReset)
 {
 }
 
@@ -74,7 +82,24 @@ BehaviorStatus DecoratorDelay::Do()
 		return BehaviorStatus::Running;
 	}
 
-	return childrenNode[nodeId]->Do();
+	BehaviorStatus status;
+	for (auto& node : childrenNode)
+	{
+		status = node->Do();
+		if (status == BehaviorStatus::Success)
+		{
+			continue;
+		}
+
+		return status;
+	}
+
+	if (isAutoReset == true)
+	{
+		startTime = std::chrono::system_clock::time_point();
+	}
+
+	return BehaviorStatus::Success;
 }
 
 DecoratorRetry::DecoratorRetry(unsigned char inMaxRetryCount)
@@ -84,25 +109,23 @@ DecoratorRetry::DecoratorRetry(unsigned char inMaxRetryCount)
 
 BehaviorStatus DecoratorRetry::Do()
 {
-	auto result = childrenNode[nodeId]->Do();
-	switch (result)
+	BehaviorStatus status;
+	for (auto& node : childrenNode)
 	{
-	case BehaviorStatus::Success:
-	case BehaviorStatus::Failure:
-		break;
-	case BehaviorStatus::Running:
-	{
-		if (retryCount < maxRetryCount)
+		status = node->Do();
+		if (status == BehaviorStatus::Success)
 		{
-			++retryCount;
-			return BehaviorStatus::Running;
+			continue;
 		}
 
-		return BehaviorStatus::Failure;
-	}
-	default:
-		return BehaviorStatus::InvalidType;
+		return status;
 	}
 
-	return result;
+	++retryCount;
+	if (retryCount < maxRetryCount)
+	{
+		return BehaviorStatus::Running;
+	}
+
+	return BehaviorStatus::Success;
 }
