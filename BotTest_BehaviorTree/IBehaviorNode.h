@@ -2,6 +2,8 @@
 #include <vector>
 #include <memory>
 
+#define DECLARE_SPTR(NodeType) using SPtr = std::shared_ptr<NodeType>;
+
 enum class BehaviorStatus
 {
 	InvalidType = 0,
@@ -14,7 +16,7 @@ using NodeIdType = unsigned int;
 class IBehaviorNode
 {
 public:
-	using SPtr = std::shared_ptr<IBehaviorNode>;
+	DECLARE_SPTR(IBehaviorNode);
 
 public:
 	virtual ~IBehaviorNode() = default;

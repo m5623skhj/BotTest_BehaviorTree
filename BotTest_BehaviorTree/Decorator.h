@@ -5,6 +5,9 @@
 class DecoratorLoop : public IBehaviorNode
 {
 public:
+	DECLARE_SPTR(DecoratorLoop);
+
+public:
 	DecoratorLoop() = delete;
 	explicit DecoratorLoop(unsigned short inMaxLoopCount);
 	~DecoratorLoop() override = default;
@@ -22,6 +25,9 @@ private:
 class DecoratorInverter : public IBehaviorNode
 {
 public:
+	DECLARE_SPTR(DecoratorInverter);
+
+public:
 	DecoratorInverter() = default;
 	~DecoratorInverter() = default;
 
@@ -31,6 +37,9 @@ public:
 
 class DecoratorDelay : public IBehaviorNode
 {
+public:
+	DECLARE_SPTR(DecoratorDelay);
+
 public:
 	DecoratorDelay() = delete;
 	explicit DecoratorDelay(unsigned int inDurationMilisecond);
@@ -46,6 +55,9 @@ private:
 
 class DecoratorRetry : public IBehaviorNode
 {
+public:
+	DECLARE_SPTR(DecoratorRetry);
+
 public:
 	DecoratorRetry() = delete;
 	explicit DecoratorRetry(unsigned char inMaxRetryCount);
