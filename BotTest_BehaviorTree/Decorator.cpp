@@ -1,8 +1,9 @@
 #include "Decorator.h"
 #include <iostream>
 
-DecoratorLoop::DecoratorLoop(unsigned short inMaxLoopCount, bool inIsAutoReset)
+DecoratorLoop::DecoratorLoop(unsigned short inMaxLoopCount, const bool inIsLoopingAllAtOnce, const bool inIsAutoReset)
 	: maxLoopCount(inMaxLoopCount)
+	, isLoopingAllAtOnce(inIsLoopingAllAtOnce)
 	, isAutoReset(inIsAutoReset)
 {
 }
@@ -15,26 +16,33 @@ BehaviorStatus DecoratorLoop::Do()
 	}
 
 	BehaviorStatus status;
-	for (; loopCount < maxLoopCount; ++loopCount)
+	while(true)
 	{
 		for (auto& node : childrenNode)
 		{
 			status = node->Do();
-			if (status == BehaviorStatus::Success)
+			if (status != BehaviorStatus::Success)
 			{
-				continue;
+				return status;
+			}
+		}
+
+		++loopCount;
+		if (loopCount >= maxLoopCount)
+		{
+			if (isAutoReset == true)
+			{
+				loopCount = 0;
 			}
 
-			return status;
+			return BehaviorStatus::Success;
+		}
+
+		if (isLoopingAllAtOnce == false)
+		{
+			return BehaviorStatus::Running;
 		}
 	}
-
-	if (isAutoReset == true)
-	{
-		loopCount = 0;
-	}
-
-	return BehaviorStatus::Success;
 }
 
 BehaviorStatus DecoratorInverter::Do()

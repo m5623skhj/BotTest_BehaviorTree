@@ -9,7 +9,7 @@ public:
 
 public:
 	DecoratorLoop() = delete;
-	explicit DecoratorLoop(unsigned short inMaxLoopCount, bool inIsAutoReset = true);
+	explicit DecoratorLoop(unsigned short inMaxLoopCount, const bool inIsLoopingAllAtOnce, const bool inIsAutoReset = true);
 	~DecoratorLoop() override = default;
 
 public:
@@ -18,7 +18,8 @@ public:
 private:
 	const unsigned short maxLoopCount;
 	unsigned short loopCount{};
-	bool isAutoReset{};
+	const bool isLoopingAllAtOnce{};
+	const bool isAutoReset{};
 };
 
 class DecoratorInverter : public IBehaviorNode
