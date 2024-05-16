@@ -16,6 +16,7 @@ public:
 
 public:
 	BehaviorStatus Do() override;
+	bool CanHaveChild() override { return false; }
 
 private:
 	BehaviorActionType action;

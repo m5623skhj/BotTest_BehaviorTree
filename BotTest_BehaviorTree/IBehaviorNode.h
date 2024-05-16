@@ -29,6 +29,8 @@ public:
 	NodeIdType GetNodeId() { return nodeId; }
 	void SetNodeId(NodeIdType inNodeId) { nodeId = inNodeId; }
 
+	virtual bool CanHaveChild() { return true; }
+
 protected:
 	std::vector<IBehaviorNode::SPtr> childrenNode{};
 	NodeIdType nodeId{};
