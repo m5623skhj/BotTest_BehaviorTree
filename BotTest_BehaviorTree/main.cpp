@@ -30,7 +30,8 @@ std::chrono::system_clock::time_point ParseTimePoint(const std::string& timeStr)
 	std::istringstream ss(timeStr);
 	std::tm tm = {};
 	ss >> std::get_time(&tm, "%Y-%m-%d %H:%M:%S");
-	if (ss.fail()) {
+	if (ss.fail()) 
+	{
 		throw std::runtime_error("Failed to parse time string");
 	}
 	return std::chrono::system_clock::from_time_t(std::mktime(&tm));
