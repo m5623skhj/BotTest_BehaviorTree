@@ -2,6 +2,12 @@
 #include "IBehaviorNode.h"
 #include <chrono>
 
+class IDecorator : public IBehaviorNode
+{
+public:
+	bool CanAddChild() override { return childrenNode.empty(); }
+};
+
 class DecoratorLoop : public IBehaviorNode
 {
 public:

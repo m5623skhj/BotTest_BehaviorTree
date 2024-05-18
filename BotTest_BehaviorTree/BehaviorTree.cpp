@@ -41,13 +41,21 @@ bool BehaviorTree::AddChildNode(IBehaviorNode::SPtr node, const NodeIdType targe
 		return true;
 	}
 
+	const auto& parentNode = nodeMap.find(targetParentNodeId);
+	if (parentNode == nodeMap.end() ||
+		parentNode->second == nullptr ||
+		parentNode->second->CanAddChild() == false)
+	{
+		return false;
+	}
+
 	if (nodeMap.insert({ myNodeId, node }).second == false)
 	{
 		return false;
 	}
 
 	lastAddedNode = rootNode;
-	nodeMap[targetParentNodeId]->AddChildNode(node);
+	parentNode->second->AddChildNode(node);
 
 	return true;
 }
