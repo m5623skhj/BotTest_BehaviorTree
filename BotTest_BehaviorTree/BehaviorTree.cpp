@@ -1,4 +1,5 @@
 #include "BehaviorTree.h"
+#include <iostream>
 
 BehaviorStatus BehaviorTree::Tick()
 {
@@ -24,6 +25,7 @@ bool BehaviorTree::AddChildNode(IBehaviorNode::SPtr node, const NodeIdType targe
 {
 	if (node == nullptr)
 	{
+		PrintAddChildNodeFailed(targetParentNodeId, myNodeId);
 		return false;
 	}
 
@@ -31,6 +33,7 @@ bool BehaviorTree::AddChildNode(IBehaviorNode::SPtr node, const NodeIdType targe
 	{
 		if (rootNode != nullptr)
 		{
+			PrintAddChildNodeFailed(0, myNodeId);
 			return false;
 		}
 
@@ -46,11 +49,13 @@ bool BehaviorTree::AddChildNode(IBehaviorNode::SPtr node, const NodeIdType targe
 		parentNode->second == nullptr ||
 		parentNode->second->CanAddChild() == false)
 	{
+		PrintAddChildNodeFailed(targetParentNodeId, myNodeId);
 		return false;
 	}
 
 	if (nodeMap.insert({ myNodeId, node }).second == false)
 	{
+		PrintAddChildNodeFailed(targetParentNodeId, myNodeId);
 		return false;
 	}
 
@@ -58,4 +63,10 @@ bool BehaviorTree::AddChildNode(IBehaviorNode::SPtr node, const NodeIdType targe
 	parentNode->second->AddChildNode(node);
 
 	return true;
+}
+
+void BehaviorTree::PrintAddChildNodeFailed(const NodeIdType parentNodeId, const NodeIdType childNodeId)
+{
+	std::cout << "AddChildNode() failed with " << parentNodeId
+		<< " and " << childNodeId << std::endl;
 }

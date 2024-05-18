@@ -20,6 +20,9 @@ public:
 	size_t GetBehaviorTreeSize() { return nodeMap.size(); }
 
 private:
+	inline void PrintAddChildNodeFailed(const NodeIdType parentNodeId, const NodeIdType childNodeId);
+
+private:
 	IBehaviorNode::SPtr rootNode = nullptr;
 	IBehaviorNode::SPtr lastAddedNode = nullptr;
 	std::unordered_map<NodeIdType, IBehaviorNode::SPtr> nodeMap;
