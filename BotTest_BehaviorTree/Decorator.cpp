@@ -125,14 +125,16 @@ BehaviorStatus DecoratorRetry::Do()
 		{
 			continue;
 		}
+		else
+		{
+			++retryCount;
+			if (retryCount < maxRetryCount)
+			{
+				return BehaviorStatus::Running;
+			}
+		}
 
 		return status;
-	}
-
-	++retryCount;
-	if (retryCount < maxRetryCount)
-	{
-		return BehaviorStatus::Running;
 	}
 
 	return BehaviorStatus::Success;
